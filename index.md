@@ -16,7 +16,7 @@ This documentation site is built with the theme itself and serves as the live re
 Switch any existing `just-the-docs` repository in `docs/_config.yml`:
 
 ```yaml
-remote_theme: UnitVectorY-Labs/uvy-docs-theme@v0.2.0
+remote_theme: UnitVectorY-Labs/uvy-docs-theme@v0.3.0
 plugins:
   - jekyll-remote-theme
 ```

@@ -4,19 +4,19 @@
 {% assign top_unordered = top_all | where_exp: "p", "p.nav_order == nil" | sort: "title" %}
 
 {% for item in top_ordered %}
-  <a href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title | escape }}</a>
   {% assign kids_all = pool | where: "parent", item.title | where_exp: "c", "c.grand_parent == nil" %}
   {% assign kids_ordered = kids_all | where_exp: "c", "c.nav_order != nil" | sort: "nav_order" %}
   {% assign kids_unordered = kids_all | where_exp: "c", "c.nav_order == nil" | sort: "title" %}
   {% assign kids_count = kids_ordered.size | plus: kids_unordered.size %}
+  <a{% if kids_count > 0 %} class="uvy-docs-nav-parent"{% endif %} href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title | escape }}</a>
   {% if kids_count > 0 %}
     <div class="uvy-docs-subnav">
       {% for child in kids_ordered %}
-        <a href="{{ child.url | relative_url }}"{% if page.url == child.url %} aria-current="page"{% endif %}>{{ child.title | escape }}</a>
         {% assign grandkids = pool | where: "parent", child.title | where: "grand_parent", item.title %}
         {% assign gk_ordered = grandkids | where_exp: "g", "g.nav_order != nil" | sort: "nav_order" %}
         {% assign gk_unordered = grandkids | where_exp: "g", "g.nav_order == nil" | sort: "title" %}
         {% assign gk_count = gk_ordered.size | plus: gk_unordered.size %}
+        <a{% if gk_count > 0 %} class="uvy-docs-nav-parent"{% endif %} href="{{ child.url | relative_url }}"{% if page.url == child.url %} aria-current="page"{% endif %}>{{ child.title | escape }}</a>
         {% if gk_count > 0 %}
           <div class="uvy-docs-subnav">
             {% for gk in gk_ordered %}
@@ -29,11 +29,11 @@
         {% endif %}
       {% endfor %}
       {% for child in kids_unordered %}
-        <a href="{{ child.url | relative_url }}"{% if page.url == child.url %} aria-current="page"{% endif %}>{{ child.title | escape }}</a>
         {% assign grandkids = pool | where: "parent", child.title | where: "grand_parent", item.title %}
         {% assign gk_ordered = grandkids | where_exp: "g", "g.nav_order != nil" | sort: "nav_order" %}
         {% assign gk_unordered = grandkids | where_exp: "g", "g.nav_order == nil" | sort: "title" %}
         {% assign gk_count = gk_ordered.size | plus: gk_unordered.size %}
+        <a{% if gk_count > 0 %} class="uvy-docs-nav-parent"{% endif %} href="{{ child.url | relative_url }}"{% if page.url == child.url %} aria-current="page"{% endif %}>{{ child.title | escape }}</a>
         {% if gk_count > 0 %}
           <div class="uvy-docs-subnav">
             {% for gk in gk_ordered %}
@@ -50,11 +50,11 @@
 {% endfor %}
 
 {% for item in top_unordered %}
-  <a href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title | escape }}</a>
   {% assign kids_all = pool | where: "parent", item.title | where_exp: "c", "c.grand_parent == nil" %}
   {% assign kids_ordered = kids_all | where_exp: "c", "c.nav_order != nil" | sort: "nav_order" %}
   {% assign kids_unordered = kids_all | where_exp: "c", "c.nav_order == nil" | sort: "title" %}
   {% assign kids_count = kids_ordered.size | plus: kids_unordered.size %}
+  <a{% if kids_count > 0 %} class="uvy-docs-nav-parent"{% endif %} href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title | escape }}</a>
   {% if kids_count > 0 %}
     <div class="uvy-docs-subnav">
       {% for child in kids_ordered %}

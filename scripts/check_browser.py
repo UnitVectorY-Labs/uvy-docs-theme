@@ -61,6 +61,10 @@ def check_layout(page, check_footer_height=True):
     foot_text = page.locator(".site-footer").inner_text()
     assert "UnitVectorY-Labs" in foot_text, page.url
     assert "on GitHub" in foot_text, page.url
+    sidebar_note = page.locator(".uvy-docs-sidebar-footer a")
+    assert sidebar_note.count() == 1, f"Missing sidebar theme link: {page.url}"
+    assert sidebar_note.get_attribute("href") == "https://github.com/UnitVectorY-Labs/uvy-docs-theme", page.url
+    assert "uvy-docs-theme" in (sidebar_note.text_content() or ""), page.url
 
 
 def contrast_ratios(page, selector):
@@ -114,13 +118,43 @@ try:
                     page.goto(base + u, wait_until="domcontentloaded")
                     check_layout(page)
                     layout_count += 1
-            # Callout contrast check if callouts exist on any page
+            # Callout & sidebar contrast check
             for u in urls:
                 page.set_viewport_size({"width": 1280, "height": 900})
                 page.goto(base + u, wait_until="domcontentloaded")
                 if page.locator("p.highlight, p.important, p.new, p.note, p.warning").count() > 0:
                     ratios = contrast_ratios(page, "p.highlight, p.important, p.new, p.note, p.warning")
                     assert min(ratios) >= 4.5, f"Low callout contrast ({theme}): {ratios}"
+            # Sidebar heading prominence and sidebar footer contrast against --uvy-bg
+            page.set_viewport_size({"width": 1280, "height": 900})
+            page.goto(base + urls[0], wait_until="domcontentloaded")
+            sidebar_checks = page.evaluate(
+                """() => {
+              const ctx = document.createElement('canvas').getContext('2d');
+              function rgb(color){ctx.clearRect(0,0,1,1);ctx.fillStyle=color;ctx.fillRect(0,0,1,1);return [...ctx.getImageData(0,0,1,1).data].slice(0,3);}
+              function lum(color){return rgb(color).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((s,v,i)=>s+v*[.2126,.7152,.0722][i],0);}
+              function ratio(fg, bg){const a=lum(fg), b=lum(bg); return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);}
+              const bg = getComputedStyle(document.body).backgroundColor;
+              const groups = [...document.querySelectorAll('.sidebar .sidebar-group')].map(el => {
+                const s = getComputedStyle(el);
+                return { weight: parseInt(s.fontWeight, 10), borderBottom: parseFloat(s.borderBottomWidth), contrast: ratio(s.color, bg) };
+              });
+              const footerP = document.querySelector('.uvy-docs-sidebar-footer p');
+              const footerA = document.querySelector('.uvy-docs-sidebar-footer a');
+              return {
+                groups,
+                footerTextContrast: ratio(getComputedStyle(footerP).color, bg),
+                footerLinkContrast: ratio(getComputedStyle(footerA).color, bg),
+              };
+            }"""
+            )
+            assert sidebar_checks["groups"], f"Expected sidebar groups ({theme})"
+            for g in sidebar_checks["groups"]:
+                assert g["weight"] >= 700, f"Sidebar group should be bold ({theme}): {g}"
+                assert g["borderBottom"] >= 1, f"Sidebar group should be underlined ({theme}): {g}"
+                assert g["contrast"] >= 4.5, f"Low sidebar group contrast ({theme}): {g}"
+            assert sidebar_checks["footerTextContrast"] >= 4.5, f"Low sidebar footer text contrast ({theme}): {sidebar_checks}"
+            assert sidebar_checks["footerLinkContrast"] >= 4.5, f"Low sidebar footer link contrast ({theme}): {sidebar_checks}"
             context.close()
 
         # Cookie theme persistence, hover logo stability, typography, search, copy button, zoom

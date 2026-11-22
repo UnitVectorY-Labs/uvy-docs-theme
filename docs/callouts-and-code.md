@@ -42,7 +42,7 @@ Fenced code blocks are enhanced automatically with a language header bar, syntax
 
 ```yaml
 title: example-service
-remote_theme: UnitVectorY-Labs/uvy-docs-theme@v0.2.0
+remote_theme: UnitVectorY-Labs/uvy-docs-theme@v0.3.0
 plugins:
   - jekyll-remote-theme
 ```
