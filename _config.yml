@@ -47,5 +47,6 @@ exclude:
   - README.md
   - uvy-docs-theme.gemspec
   - scripts/
+  - vendor/
   - .venv/
   - requirements*.txt
