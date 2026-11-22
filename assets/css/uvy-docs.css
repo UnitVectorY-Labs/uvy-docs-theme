@@ -1,0 +1,473 @@
+/*
+  UnitVectorY-Labs Docs Theme — documentation layer built on top of uvy.css.
+  Uses --uvy-* tokens exclusively so light and midnight-slate dark modes stay aligned.
+*/
+
+:root {
+  --uvy-docs-purple: light-dark(#5b21b6, #c4b5fd);
+  --uvy-docs-purple-bg: light-dark(#f3eeff, #1e1538);
+
+  /* Syntax highlighting tokens (>= 4.5:1 against --uvy-sunken in light & dark) */
+  --uvy-syn-comment: light-dark(#525e70, #8a99b3);
+  --uvy-syn-keyword: light-dark(#b43e00, #ff8f40);
+  --uvy-syn-string: light-dark(#146334, #70e89c);
+  --uvy-syn-number: light-dark(#1b4bd1, #7db5ff);
+  --uvy-syn-func: light-dark(#6d28d9, #c4b5fd);
+  --uvy-syn-type: light-dark(#0b6e65, #5eead4);
+  --uvy-syn-attr: light-dark(#854d0e, #facc55);
+  --uvy-syn-del: light-dark(#b91c1c, #ff8a8a);
+  --uvy-syn-del-bg: light-dark(#fdecec, #34151b);
+  --uvy-syn-add: light-dark(#166534, #6ee798);
+  --uvy-syn-add-bg: light-dark(#e7f6ec, #0e2a1c);
+}
+
+/* Article layout: prose stays capped at 70ch via uvy.css; tables/code/diagrams use workspace width */
+.uvy-docs-article {
+  min-width: 0;
+}
+.uvy-docs-article > :first-child {
+  margin-top: 0;
+}
+.uvy-docs-article > h1:first-child,
+.uvy-docs-article > .uvy-breadcrumbs + h1 {
+  padding-bottom: var(--uvy-space-4);
+  margin-bottom: var(--uvy-space-5);
+  border-bottom: 1px solid var(--uvy-border);
+}
+
+/* Sidebar nested tree & external links */
+.uvy-docs-subnav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+  margin: 2px 0 var(--uvy-space-1) var(--uvy-space-3);
+  padding-left: var(--uvy-space-2);
+  border-left: 1px solid var(--uvy-border);
+}
+.sidebar nav a.uvy-docs-ext-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--uvy-space-2);
+}
+.uvy-docs-ext-group {
+  margin-top: var(--uvy-space-3);
+  border-top: 1px solid var(--uvy-border);
+}
+
+/* Sidebar full-text search */
+.uvy-docs-search {
+  margin-top: var(--uvy-space-2);
+}
+.uvy-docs-search .uvy-field {
+  margin: 0;
+}
+.uvy-docs-search__input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.uvy-docs-search__icon {
+  position: absolute;
+  left: 0.625rem;
+  pointer-events: none;
+}
+.uvy-docs-search__input {
+  width: 100%;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  font-size: 0.8125rem;
+}
+.uvy-docs-search__kbd {
+  position: absolute;
+  right: 0.5rem;
+  pointer-events: none;
+  color: var(--uvy-text-faint);
+}
+.uvy-docs-search__input:focus ~ .uvy-docs-search__kbd,
+.uvy-docs-search__input:not(:placeholder-shown) ~ .uvy-docs-search__kbd {
+  display: none;
+}
+.uvy-docs-search__results {
+  display: grid;
+  gap: var(--uvy-space-1);
+}
+.uvy-docs-search__meta {
+  margin: 0 0 var(--uvy-space-1);
+  padding-inline: var(--uvy-space-2);
+  color: var(--uvy-text-muted);
+  font-family: var(--uvy-font-mono);
+  font-size: var(--uvy-text-xs);
+}
+.uvy-docs-search__list {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.uvy-docs-search__list li {
+  margin: 0;
+  max-width: none;
+}
+.uvy-docs-search__item {
+  display: block;
+  padding: var(--uvy-space-2) var(--uvy-space-3);
+  border: 1px solid transparent;
+  border-radius: var(--uvy-radius-control);
+  color: var(--uvy-text);
+  text-decoration: none;
+  transition: background-color var(--uvy-duration) var(--uvy-ease),
+    border-color var(--uvy-duration) var(--uvy-ease);
+}
+.uvy-docs-search__item:hover,
+.uvy-docs-search__item[aria-selected="true"] {
+  background: var(--uvy-hover);
+  border-color: var(--uvy-border);
+  text-decoration: none;
+}
+.uvy-docs-search__title {
+  display: block;
+  font-family: var(--uvy-font-mono);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--uvy-text);
+  overflow-wrap: anywhere;
+}
+.uvy-docs-search__parent {
+  display: block;
+  font-family: var(--uvy-font-mono);
+  font-size: 0.6875rem;
+  color: var(--uvy-text-faint);
+}
+.uvy-docs-search__snippet {
+  display: block;
+  margin-top: 2px;
+  color: var(--uvy-text-muted);
+  font-size: var(--uvy-text-xs);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.uvy-docs-search__results mark {
+  padding: 0;
+  border-radius: 2px;
+  background: var(--uvy-accent-subtle);
+  color: var(--uvy-text);
+  font-weight: 600;
+}
+.uvy-docs-search__empty {
+  margin: var(--uvy-space-2) 0 0;
+  padding: var(--uvy-space-3);
+  border: 1px dashed var(--uvy-border-emphasis);
+  border-radius: var(--uvy-radius-control);
+  color: var(--uvy-text-muted);
+  font-size: var(--uvy-text-xs);
+}
+
+/* Kramdown {:toc} and .text-delta heading */
+.text-delta {
+  margin-top: var(--uvy-space-4);
+  margin-bottom: var(--uvy-space-2);
+  color: var(--uvy-text-muted);
+  font-family: var(--uvy-font-mono);
+  font-size: var(--uvy-text-xs);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+#markdown-toc {
+  margin: 0 0 var(--uvy-space-5);
+  padding: var(--uvy-space-3) var(--uvy-space-4);
+  border: 1px solid var(--uvy-border);
+  border-radius: var(--uvy-radius-panel);
+  background: var(--uvy-surface);
+  list-style: none;
+  max-width: var(--uvy-measure);
+}
+#markdown-toc ul {
+  margin: var(--uvy-space-1) 0 0;
+  padding-left: var(--uvy-space-4);
+  list-style: none;
+  border-left: 1px solid var(--uvy-border);
+}
+#markdown-toc li {
+  margin: 0;
+  padding-block: 0.125rem;
+}
+#markdown-toc a {
+  color: var(--uvy-text-muted);
+  font-family: var(--uvy-font-mono);
+  font-size: 0.8125rem;
+  text-decoration: none;
+}
+#markdown-toc a:hover {
+  color: var(--uvy-link);
+  text-decoration: underline;
+}
+
+/* Kramdown / just-the-docs callouts (strictly scoped to p/blockquote so Rouge div.highlight is unaffected) */
+p.highlight,
+blockquote.highlight,
+p.important,
+blockquote.important,
+p.new,
+blockquote.new,
+p.note,
+blockquote.note,
+p.warning,
+blockquote.warning {
+  --uvy-callout-fg: var(--uvy-info);
+  --uvy-callout-bg: var(--uvy-info-bg);
+  max-width: var(--uvy-measure);
+  margin: 0 0 var(--uvy-space-4);
+  padding: var(--uvy-space-3) var(--uvy-space-4);
+  border: 1px solid color-mix(in srgb, var(--uvy-callout-fg) 32%, transparent);
+  border-left: var(--uvy-stroke) solid var(--uvy-callout-fg);
+  border-radius: var(--uvy-radius-panel);
+  background: var(--uvy-callout-bg);
+  color: var(--uvy-text);
+  font-size: var(--uvy-text-sm);
+  line-height: 1.55;
+}
+p.highlight::before,
+blockquote.highlight::before,
+p.important::before,
+blockquote.important::before,
+p.new::before,
+blockquote.new::before,
+p.note::before,
+blockquote.note::before,
+p.warning::before,
+blockquote.warning::before {
+  display: block;
+  margin-bottom: var(--uvy-space-1);
+  color: var(--uvy-callout-fg);
+  font-family: var(--uvy-font-mono);
+  font-size: var(--uvy-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+p.highlight,
+blockquote.highlight {
+  --uvy-callout-fg: var(--uvy-warn);
+  --uvy-callout-bg: var(--uvy-warn-bg);
+}
+p.important,
+blockquote.important {
+  --uvy-callout-fg: var(--uvy-info);
+  --uvy-callout-bg: var(--uvy-info-bg);
+}
+p.important::before,
+blockquote.important::before {
+  content: "Important";
+}
+p.new,
+blockquote.new {
+  --uvy-callout-fg: var(--uvy-ok);
+  --uvy-callout-bg: var(--uvy-ok-bg);
+}
+p.new::before,
+blockquote.new::before {
+  content: "New";
+}
+p.note,
+blockquote.note {
+  --uvy-callout-fg: var(--uvy-docs-purple);
+  --uvy-callout-bg: var(--uvy-docs-purple-bg);
+}
+p.note::before,
+blockquote.note::before {
+  content: "Note";
+}
+p.warning,
+blockquote.warning {
+  --uvy-callout-fg: var(--uvy-danger);
+  --uvy-callout-bg: var(--uvy-danger-bg);
+}
+p.warning::before,
+blockquote.warning::before {
+  content: "Warning";
+}
+
+/* Heading anchor links */
+.uvy-docs-article :is(h2, h3, h4)[id] {
+  scroll-margin-top: var(--uvy-space-5);
+}
+.uvy-heading-anchor {
+  margin-left: var(--uvy-space-2);
+  color: var(--uvy-text-faint);
+  font-weight: 400;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--uvy-duration) var(--uvy-ease),
+    color var(--uvy-duration) var(--uvy-ease);
+}
+.uvy-docs-article :is(h2, h3, h4):hover .uvy-heading-anchor,
+.uvy-heading-anchor:focus-visible {
+  opacity: 1;
+}
+.uvy-heading-anchor:hover {
+  color: var(--uvy-link);
+  text-decoration: none;
+}
+
+/* Tables in Markdown: no-JS overflow guard + framed .table-wrap polish */
+.uvy-docs-article > table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+  border: 1px solid var(--uvy-border);
+  border-radius: var(--uvy-radius-panel);
+  background: var(--uvy-surface);
+}
+.uvy-docs-article .table-wrap {
+  margin: 0 0 var(--uvy-space-5);
+  border: 1px solid var(--uvy-border);
+  border-radius: var(--uvy-radius-panel);
+  background: var(--uvy-surface);
+}
+.uvy-docs-article .table-wrap > table {
+  display: table;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+.uvy-docs-article .table-wrap tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+/* Rouge code blocks: avoid nested borders & match uvy.css .uvy-code */
+div.highlighter-rouge {
+  margin: 0 0 var(--uvy-space-5);
+}
+div.highlighter-rouge > div.highlight {
+  margin: 0;
+  background: none;
+}
+.uvy-code div.highlighter-rouge {
+  margin: 0;
+}
+.uvy-code pre.highlight {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--uvy-sunken);
+}
+.highlight .c,
+.highlight .c1,
+.highlight .cm,
+.highlight .cp,
+.highlight .cs {
+  color: var(--uvy-syn-comment);
+  font-style: italic;
+}
+.highlight .k,
+.highlight .kc,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .ow {
+  color: var(--uvy-syn-keyword);
+  font-weight: 500;
+}
+.highlight .s,
+.highlight .s1,
+.highlight .s2,
+.highlight .sb,
+.highlight .sc,
+.highlight .sd,
+.highlight .se,
+.highlight .sh,
+.highlight .si,
+.highlight .sr,
+.highlight .ss,
+.highlight .sx {
+  color: var(--uvy-syn-string);
+}
+.highlight .m,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .mo,
+.highlight .il {
+  color: var(--uvy-syn-number);
+}
+.highlight .nf,
+.highlight .fm {
+  color: var(--uvy-syn-func);
+}
+.highlight .nc,
+.highlight .kt,
+.highlight .nn,
+.highlight .no {
+  color: var(--uvy-syn-type);
+}
+.highlight .na,
+.highlight .nt,
+.highlight .nv,
+.highlight .nb,
+.highlight .pi {
+  color: var(--uvy-syn-attr);
+}
+.highlight .gd {
+  color: var(--uvy-syn-del);
+  background: var(--uvy-syn-del-bg);
+}
+.highlight .gi {
+  color: var(--uvy-syn-add);
+  background: var(--uvy-syn-add-bg);
+}
+.highlight .err {
+  color: var(--uvy-syn-del);
+}
+
+/* Mermaid diagram frame */
+.uvy-mermaid {
+  margin: 0 0 var(--uvy-space-5);
+  padding: var(--uvy-space-4);
+  overflow-x: auto;
+  border: 1px solid var(--uvy-border);
+  border-radius: var(--uvy-radius-panel);
+  background: var(--uvy-surface);
+  font-family: var(--uvy-font-mono);
+  font-size: var(--uvy-text-xs);
+  white-space: pre;
+}
+.uvy-mermaid svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+  white-space: normal;
+}
+.uvy-mermaid svg * {
+  filter: none !important;
+}
+
+/* Auto child-page section */
+.uvy-docs-children {
+  margin-top: var(--uvy-space-7);
+}
+.uvy-docs-children > h2 {
+  margin-top: 0;
+}
+
+/* Copy button icon states inside .uvy-code (mirrors uvy.css) */
+.uvy-copy [data-copied] {
+  display: none;
+}
+.uvy-copy.is-copied [data-copy] {
+  display: none;
+}
+.uvy-copy.is-copied [data-copied] {
+  display: inline-flex;
+}
+
+@media print {
+  .uvy-docs-search,
+  .uvy-heading-anchor,
+  .uvy-code__bar button,
+  .uvy-source-note {
+    display: none !important;
+  }
+}

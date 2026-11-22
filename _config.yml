@@ -1,0 +1,51 @@
+title: UnitVectorY-Labs Docs Theme
+description: "Standardized Jekyll remote theme implementing UnitVectorY-Labs Design for GitHub Pages documentation."
+baseurl: "/uvy-docs-theme"
+url: "https://unitvectory-labs.github.io"
+
+plugins:
+  - jekyll-relative-links
+
+relative_links:
+  enabled: true
+  collections: true
+
+callouts:
+  highlight:
+    color: yellow
+  important:
+    title: Important
+    color: blue
+  new:
+    title: New
+    color: green
+  note:
+    title: Note
+    color: purple
+  warning:
+    title: Warning
+    color: red
+
+mermaid:
+  version: "12.3.0"
+
+nav_external_links:
+  - title: Design Guide
+    url: https://unitvectory-labs.github.io/uvy-design/
+  - title: uvy-docs-theme on GitHub
+    url: https://github.com/UnitVectorY-Labs/uvy-docs-theme
+
+gh_edit_link: true
+gh_edit_link_text: "Edit this page on GitHub."
+gh_edit_repository: "https://github.com/UnitVectorY-Labs/uvy-docs-theme"
+gh_edit_branch: "main"
+gh_edit_view_mode: "blob"
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - uvy-docs-theme.gemspec
+  - scripts/
+  - .venv/
+  - requirements*.txt

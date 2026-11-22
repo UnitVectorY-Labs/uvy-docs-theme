@@ -1,0 +1,106 @@
+{% if site.mermaid and site.mermaid.version %}
+<script type="module">
+  const blocks = [...document.querySelectorAll("code.language-mermaid")];
+  if (blocks.length > 0) {
+    const containers = blocks.map((code) => {
+      const source = code.textContent.trim();
+      const pre = code.closest("pre");
+      const outer = pre ? (pre.closest(".highlighter-rouge") || pre) : code;
+      const box = document.createElement("div");
+      box.className = "uvy-mermaid";
+      box.dataset.mermaidSource = source;
+      box.textContent = source;
+      outer.replaceWith(box);
+      return box;
+    });
+
+    try {
+      const mod = await import("https://cdn.jsdelivr.net/npm/mermaid@{{ site.mermaid.version | escape }}/dist/mermaid.esm.min.mjs");
+      const mermaid = mod.default;
+
+      function readTokens() {
+        const s = getComputedStyle(document.documentElement);
+        const v = (name) => s.getPropertyValue(name).trim();
+        const probe = document.createElement("span");
+        probe.style.display = "none";
+        document.body.append(probe);
+        const resolve = (expr) => {
+          probe.style.color = expr;
+          return getComputedStyle(probe).color;
+        };
+        const tokens = {
+          bg: resolve("var(--uvy-bg)"),
+          surface: resolve("var(--uvy-surface)"),
+          sunken: resolve("var(--uvy-sunken)"),
+          border: resolve("var(--uvy-border-emphasis)"),
+          text: resolve("var(--uvy-text)"),
+          muted: resolve("var(--uvy-text-muted)"),
+          accent: resolve("var(--uvy-accent)"),
+          mono: v("--uvy-font-mono") || "monospace",
+        };
+        probe.remove();
+        return tokens;
+      }
+
+      let renderSeq = 0;
+      async function renderAll() {
+        const t = readTokens();
+        mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: "loose",
+          theme: "base",
+          themeVariables: {
+            background: t.surface,
+            primaryColor: t.surface,
+            primaryTextColor: t.text,
+            primaryBorderColor: t.border,
+            secondaryColor: t.sunken,
+            secondaryTextColor: t.text,
+            secondaryBorderColor: t.border,
+            tertiaryColor: t.bg,
+            tertiaryTextColor: t.text,
+            tertiaryBorderColor: t.border,
+            lineColor: t.muted,
+            textColor: t.text,
+            mainBkg: t.surface,
+            nodeBorder: t.border,
+            clusterBkg: t.sunken,
+            clusterBorder: t.border,
+            actorBkg: t.surface,
+            actorBorder: t.border,
+            actorTextColor: t.text,
+            actorLineColor: t.border,
+            signalColor: t.text,
+            signalTextColor: t.text,
+            noteBkgColor: t.sunken,
+            noteTextColor: t.text,
+            noteBorderColor: t.accent,
+            fontFamily: t.mono,
+            fontSize: "13px",
+          },
+        });
+
+        for (let i = 0; i < containers.length; i++) {
+          const box = containers[i];
+          const id = "uvy-mermaid-" + (++renderSeq);
+          try {
+            const { svg } = await mermaid.render(id, box.dataset.mermaidSource);
+            box.innerHTML = svg;
+          } catch (_) {
+            box.textContent = box.dataset.mermaidSource;
+          }
+        }
+      }
+
+      await renderAll();
+      new MutationObserver(renderAll).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"],
+      });
+      matchMedia("(prefers-color-scheme: dark)").addEventListener("change", renderAll);
+    } catch (_) {
+      // Keep readable source text if CDN is unreachable.
+    }
+  }
+</script>
+{% endif %}

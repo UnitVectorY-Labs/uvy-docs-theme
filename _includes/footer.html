@@ -1,0 +1,47 @@
+{% assign repo_url = site.uvy_docs.repository | default: site.gh_edit_repository %}
+{% if repo_url == nil or repo_url == '' %}
+  {% if site.nav_external_links %}
+    {% for ext in site.nav_external_links %}
+      {% if ext.url contains 'github.com/' %}
+        {% assign repo_url = ext.url %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endif %}
+{% if repo_url == nil or repo_url == '' %}
+  {% assign repo_url = site.github.repository_url %}
+{% endif %}
+{% assign repo_name = site.uvy_docs.repository_name %}
+{% if repo_name == nil or repo_name == '' %}
+  {% if repo_url and repo_url != '' %}
+    {% assign repo_parts = repo_url | split: '/' %}
+    {% assign repo_name = repo_parts.last %}
+  {% else %}
+    {% assign repo_name = site.title | default: 'documentation' %}
+  {% endif %}
+{% endif %}
+{% assign repo_branch = site.uvy_docs.branch | default: site.gh_edit_branch | default: 'main' %}
+{% assign license_name = site.uvy_docs.license | default: 'MIT License' %}
+{% assign license_url = site.uvy_docs.license_url %}
+{% if license_url == nil or license_url == '' %}
+  {% if repo_url and repo_url != '' %}
+    {% assign license_url = repo_url | append: '/blob/' | append: repo_branch | append: '/LICENSE' %}
+  {% else %}
+    {% assign license_url = 'LICENSE' | relative_url %}
+  {% endif %}
+{% endif %}
+<footer class="site-footer{% if site.uvy_docs.wide %} site-footer--wide{% endif %}">
+  <div class="footer-inner">
+    <p>
+      <a href="https://github.com/UnitVectorY-Labs">UnitVectorY-Labs</a>
+      <span class="footer-sep" aria-hidden="true">|</span>
+      <a href="{{ license_url | escape }}">{{ license_name | escape }}</a>
+      {% if repo_url and repo_url != '' %}
+        <span class="footer-sep" aria-hidden="true">|</span>
+        <a href="{{ repo_url | escape }}"><strong>{{ repo_name | escape }}</strong></a> on GitHub
+      {% endif %}
+    </p>
+  </div>
+</footer>
+{% include footer_custom.html %}

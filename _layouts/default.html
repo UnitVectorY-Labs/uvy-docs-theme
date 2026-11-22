@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="{{ site.lang | default: 'en' }}">
+  {% include head.html %}
+  <body>
+    {% include header.html %}
+    <main class="page{% if site.uvy_docs.wide %} page--wide{% endif %} layout" id="main">
+      {% include sidebar.html %}
+      <div class="workspace">
+        <article class="uvy-docs-article">
+          {% include breadcrumbs.html %}
+          {% unless content contains '<h1' %}
+            {% if page.title %}
+              <h1>{{ page.title | escape }}</h1>
+            {% endif %}
+          {% endunless %}
+          {{ content }}
+          {% if page.has_children == true and page.has_toc != false %}
+            {% assign child_source = site.html_pages %}
+            {% if page.collection %}
+              {% assign child_source = site[page.collection] %}
+            {% endif %}
+            {% assign children_all = child_source | where: "parent", page.title %}
+            {% assign children_ordered = children_all | where_exp: "item", "item.nav_order != nil" | sort: "nav_order" %}
+            {% assign children_unordered = children_all | where_exp: "item", "item.nav_order == nil" | sort: "title" %}
+            {% assign children_count = children_ordered.size | plus: children_unordered.size %}
+            {% if children_count > 0 %}
+              <section class="uvy-docs-children" aria-labelledby="section-pages-heading">
+                <h2 id="section-pages-heading">Pages in this section</h2>
+                <ul class="uvy-index">
+                  {% for child in children_ordered %}
+                    {% unless child.nav_exclude == true %}
+                      <li>
+                        <a href="{{ child.url | relative_url }}">
+                          <strong>{{ child.title | escape }}</strong>
+                          {% if child.description %}
+                            <span>{{ child.description | escape }}</span>
+                          {% else %}
+                            <span>{{ child.url | relative_url }}</span>
+                          {% endif %}
+                        </a>
+                      </li>
+                    {% endunless %}
+                  {% endfor %}
+                  {% for child in children_unordered %}
+                    {% unless child.nav_exclude == true %}
+                      <li>
+                        <a href="{{ child.url | relative_url }}">
+                          <strong>{{ child.title | escape }}</strong>
+                          {% if child.description %}
+                            <span>{{ child.description | escape }}</span>
+                          {% else %}
+                            <span>{{ child.url | relative_url }}</span>
+                          {% endif %}
+                        </a>
+                      </li>
+                    {% endunless %}
+                  {% endfor %}
+                </ul>
+              </section>
+            {% endif %}
+          {% endif %}
+          {% if site.gh_edit_link and site.gh_edit_repository and page.path %}
+            {% assign edit_mode = site.gh_edit_view_mode | default: 'blob' %}
+            {% assign edit_branch = site.gh_edit_branch | default: 'main' %}
+            {% assign edit_source = site.gh_edit_source %}
+            {% if edit_source and edit_source != '' %}
+              {% assign edit_url = site.gh_edit_repository | append: '/' | append: edit_mode | append: '/' | append: edit_branch | append: '/' | append: edit_source | append: '/' | append: page.path %}
+            {% else %}
+              {% assign edit_url = site.gh_edit_repository | append: '/' | append: edit_mode | append: '/' | append: edit_branch | append: '/' | append: page.path %}
+            {% endif %}
+            <p class="uvy-source-note">
+              <a href="{{ edit_url | escape }}">{{ site.gh_edit_link_text | default: 'Edit this page on GitHub.' | escape }}</a>
+            </p>
+          {% endif %}
+        </article>
+      </div>
+    </main>
+    <button id="menu-backdrop" class="menu-backdrop" type="button" aria-label="Close navigation" tabindex="-1" hidden></button>
+    {% include footer.html %}
+    {% include mermaid.html %}
+  </body>
+</html>

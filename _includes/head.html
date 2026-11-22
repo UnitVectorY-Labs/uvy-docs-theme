@@ -1,0 +1,63 @@
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  {% if page.url == '/' or page.title == nil or page.title == site.title %}
+    <title>{{ site.title | default: 'Documentation' | escape }}</title>
+  {% else %}
+    <title>{{ page.title | escape }} — {{ site.title | default: 'Documentation' | escape }}</title>
+  {% endif %}
+  {% assign meta_desc = page.description | default: site.description %}
+  {% if meta_desc %}
+    <meta name="description" content="{{ meta_desc | strip_html | normalize_whitespace | escape }}" />
+  {% endif %}
+  <link rel="icon" type="image/svg+xml" href="{{ '/assets/uvy-standalone-mark-light.svg' | relative_url }}" media="(prefers-color-scheme: light)" />
+  <link rel="icon" type="image/svg+xml" href="{{ '/assets/uvy-standalone-mark-dark.svg' | relative_url }}" media="(prefers-color-scheme: dark)" />
+  <link rel="stylesheet" href="{{ '/assets/css/uvy.css' | relative_url }}" />
+  <link rel="stylesheet" href="{{ '/assets/css/uvy-docs.css' | relative_url }}" />
+  {% if site.callouts %}
+    <style>
+      {% for callout in site.callouts %}
+        {% assign c_name = callout[0] %}
+        {% assign c_cfg = callout[1] %}
+        {% assign c_color = c_cfg.color | default: 'blue' %}
+        {% assign c_title = c_cfg.title %}
+        {% case c_color %}
+          {% when 'yellow' %}
+            {% assign c_fg = 'var(--uvy-warn)' %}
+            {% assign c_bg = 'var(--uvy-warn-bg)' %}
+          {% when 'green' %}
+            {% assign c_fg = 'var(--uvy-ok)' %}
+            {% assign c_bg = 'var(--uvy-ok-bg)' %}
+          {% when 'red' %}
+            {% assign c_fg = 'var(--uvy-danger)' %}
+            {% assign c_bg = 'var(--uvy-danger-bg)' %}
+          {% when 'purple' %}
+            {% assign c_fg = 'var(--uvy-docs-purple)' %}
+            {% assign c_bg = 'var(--uvy-docs-purple-bg)' %}
+          {% when 'orange' %}
+            {% assign c_fg = 'var(--uvy-accent)' %}
+            {% assign c_bg = 'var(--uvy-accent-subtle)' %}
+          {% else %}
+            {% assign c_fg = 'var(--uvy-info)' %}
+            {% assign c_bg = 'var(--uvy-info-bg)' %}
+        {% endcase %}
+        p.{{ c_name }}, blockquote.{{ c_name }} {
+          --uvy-callout-fg: {{ c_fg }};
+          --uvy-callout-bg: {{ c_bg }};
+        }
+        {% if c_title %}
+        p.{{ c_name }}::before, blockquote.{{ c_name }}::before {
+          content: {{ c_title | jsonify }};
+        }
+        {% else %}
+        p.{{ c_name }}::before, blockquote.{{ c_name }}::before {
+          content: none;
+        }
+        {% endif %}
+      {% endfor %}
+    </style>
+  {% endif %}
+  <script src="{{ '/assets/js/uvy.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/uvy-docs.js' | relative_url }}" data-search-index="{{ '/assets/js/search-data.json' | relative_url }}" defer></script>
+  {% include head_custom.html %}
+</head>

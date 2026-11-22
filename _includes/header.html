@@ -1,0 +1,54 @@
+{% assign repo_url = site.uvy_docs.repository | default: site.gh_edit_repository %}
+{% if repo_url == nil or repo_url == '' %}
+  {% if site.nav_external_links %}
+    {% for ext in site.nav_external_links %}
+      {% if ext.url contains 'github.com/' %}
+        {% assign repo_url = ext.url %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endif %}
+{% if repo_url == nil or repo_url == '' %}
+  {% assign repo_url = site.github.repository_url %}
+{% endif %}
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header{% if site.uvy_docs.wide %} site-header--wide{% endif %}">
+  <div class="header-inner">
+    {% include icons.html %}
+    <div class="header-identity">
+      <button id="menu" class="icon-button menu-button" type="button" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false" hidden>
+        <svg class="icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#tabler-menu"></use></svg>
+      </button>
+      <a class="brand" href="{{ '/' | relative_url }}">
+        <svg class="uvy-mark" aria-hidden="true" width="28" height="28" viewBox="0 0 100 100"><g stroke-width="4" stroke-linejoin="round"><polygon class="uvy-mark__top" points="50,8 82.5,26.75 50,45.5 17.5,26.75"/><polygon class="uvy-mark__left" points="12.3,35.75 44.8,54.5 44.8,92 12.3,73.25"/><polygon class="uvy-mark__right" points="55.2,54.5 87.7,35.75 87.7,73.25 55.2,92"/></g></svg>
+        <span>{{ site.title | default: 'Documentation' | escape }}</span>
+      </a>
+    </div>
+    <nav aria-label="Main navigation">
+      {% if site.uvy_docs.header_links %}
+        {% for link in site.uvy_docs.header_links %}
+          <a href="{{ link.url | escape }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+        {% endfor %}
+      {% elsif site.aux_links %}
+        {% for aux in site.aux_links %}
+          {% assign aux_title = aux[0] %}
+          {% assign aux_val = aux[1] %}
+          {% if aux_val.first %}
+            {% assign aux_href = aux_val.first %}
+          {% else %}
+            {% assign aux_href = aux_val %}
+          {% endif %}
+          <a href="{{ aux_href | escape }}">{{ aux_title | escape }}</a>
+        {% endfor %}
+      {% elsif repo_url and repo_url != '' %}
+        <a href="{{ '/' | relative_url }}" aria-current="page">Docs</a>
+        <a href="{{ repo_url | escape }}">GitHub</a>
+      {% endif %}
+    </nav>
+    <button id="theme" class="icon-button" type="button" aria-label="Switch color theme" hidden>
+      <svg class="icon" aria-hidden="true" data-icon="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#tabler-moon"></use></svg>
+      <svg class="icon" aria-hidden="true" data-icon="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#tabler-sun"></use></svg>
+    </button>
+  </div>
+</header>

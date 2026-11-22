@@ -1,0 +1,15 @@
+---
+---
+[{% assign first_doc = true %}{% for item in site.html_pages %}{% if item.title and item.search_exclude != true and item.url != '/404.html' %}{% unless first_doc %},{% endunless %}{% assign first_doc = false %}{
+  "title": {{ item.title | jsonify }},
+  "parent": {{ item.parent | default: "" | jsonify }},
+  "url": {{ item.url | relative_url | jsonify }},
+  "headings": [{% assign first_h = true %}{% assign h_chunks = item.content | split: '<h' %}{% for chunk in h_chunks %}{% assign lvl = chunk | slice: 0, 2 %}{% if lvl == '2 ' or lvl == '3 ' %}{% assign h_block = chunk | split: '</h' | first %}{% assign h_open = h_block | split: '>' | first %}{% if h_open contains 'id="' %}{% unless h_open contains 'no_toc' %}{% assign h_id = h_open | split: 'id="' | last | split: '"' | first %}{% assign h_prefix = h_open | append: '>' %}{% assign h_inner = h_block | remove_first: h_prefix | strip_html | normalize_whitespace %}{% if h_id != '' and h_inner != '' %}{% unless first_h %},{% endunless %}{% assign first_h = false %}{"id": {{ h_id | jsonify }}, "text": {{ h_inner | jsonify }}}{% endif %}{% endunless %}{% endif %}{% endif %}{% endfor %}],
+  "content": {{ item.content | strip_html | normalize_whitespace | jsonify }}
+}{% endif %}{% endfor %}{% if site.just_the_docs.collections %}{% for col_entry in site.just_the_docs.collections %}{% assign col_key = col_entry[0] %}{% assign col_cfg = col_entry[1] %}{% assign col_name = col_cfg.name | default: col_key %}{% for item in site[col_key] %}{% if item.title and item.search_exclude != true %}{% unless first_doc %},{% endunless %}{% assign first_doc = false %}{
+  "title": {{ item.title | jsonify }},
+  "parent": {{ item.parent | default: col_name | jsonify }},
+  "url": {{ item.url | relative_url | jsonify }},
+  "headings": [{% assign first_h = true %}{% assign h_chunks = item.content | split: '<h' %}{% for chunk in h_chunks %}{% assign lvl = chunk | slice: 0, 2 %}{% if lvl == '2 ' or lvl == '3 ' %}{% assign h_block = chunk | split: '</h' | first %}{% assign h_open = h_block | split: '>' | first %}{% if h_open contains 'id="' %}{% unless h_open contains 'no_toc' %}{% assign h_id = h_open | split: 'id="' | last | split: '"' | first %}{% assign h_prefix = h_open | append: '>' %}{% assign h_inner = h_block | remove_first: h_prefix | strip_html | normalize_whitespace %}{% if h_id != '' and h_inner != '' %}{% unless first_h %},{% endunless %}{% assign first_h = false %}{"id": {{ h_id | jsonify }}, "text": {{ h_inner | jsonify }}}{% endif %}{% endunless %}{% endif %}{% endif %}{% endfor %}],
+  "content": {{ item.content | strip_html | normalize_whitespace | jsonify }}
+}{% endif %}{% endfor %}{% endfor %}{% endif %}]

@@ -1,0 +1,31 @@
+{% if page.parent or page.collection %}
+  {% assign bc_source = site.html_pages %}
+  {% if page.collection %}
+    {% assign bc_source = site[page.collection] %}
+  {% endif %}
+  <nav class="uvy-breadcrumbs" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="{{ '/' | relative_url }}">{{ site.title | default: 'Docs' | escape }}</a></li>
+      {% if page.collection and site.just_the_docs.collections[page.collection] %}
+        <li><span>{{ site.just_the_docs.collections[page.collection].name | default: page.collection | escape }}</span></li>
+      {% endif %}
+      {% if page.grand_parent %}
+        {% assign gp_page = bc_source | where: "title", page.grand_parent | first %}
+        {% if gp_page %}
+          <li><a href="{{ gp_page.url | relative_url }}">{{ gp_page.title | escape }}</a></li>
+        {% else %}
+          <li><span>{{ page.grand_parent | escape }}</span></li>
+        {% endif %}
+      {% endif %}
+      {% if page.parent %}
+        {% assign parent_page = bc_source | where: "title", page.parent | first %}
+        {% if parent_page %}
+          <li><a href="{{ parent_page.url | relative_url }}">{{ parent_page.title | escape }}</a></li>
+        {% else %}
+          <li><span>{{ page.parent | escape }}</span></li>
+        {% endif %}
+      {% endif %}
+      <li aria-current="page">{{ page.title | escape }}</li>
+    </ol>
+  </nav>
+{% endif %}

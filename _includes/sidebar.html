@@ -1,0 +1,51 @@
+<aside id="sidebar" class="sidebar" aria-label="Documentation navigation">
+  <div class="sidebar-tools">
+    <div class="sidebar-heading">
+      <h2>Navigation</h2>
+      <button id="menu-close" class="icon-button sidebar-close" type="button" aria-label="Close navigation" hidden>
+        <svg class="icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#tabler-x"></use></svg>
+      </button>
+    </div>
+    {% unless site.search_enabled == false or site.uvy_docs.search_enabled == false %}
+      <div class="uvy-docs-search" data-requires-js hidden>
+        <div class="uvy-field">
+          <label for="docs-search" class="sr-only">Search documentation</label>
+          <div class="uvy-docs-search__input-wrap">
+            <svg class="icon icon-small icon-muted uvy-docs-search__icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#tabler-search"></use></svg>
+            <input id="docs-search" class="uvy-input--mono uvy-docs-search__input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false" aria-controls="docs-search-results" aria-expanded="false" />
+            <kbd class="uvy-docs-search__kbd" aria-hidden="true">/</kbd>
+          </div>
+        </div>
+      </div>
+    {% endunless %}
+  </div>
+  {% unless site.search_enabled == false or site.uvy_docs.search_enabled == false %}
+    <div id="docs-search-results" class="uvy-docs-search__results" role="region" aria-label="Search results" aria-live="polite" hidden></div>
+  {% endunless %}
+  <nav id="docs-nav" aria-label="Documentation navigation">
+    {% assign nav_pages = site.html_pages | where_exp: "p", "p.title != nil" | where_exp: "p", "p.nav_exclude != true" | where_exp: "p", "p.url != '/404.html'" %}
+    {% include nav_items.html pages=nav_pages %}
+
+    {% if site.just_the_docs.collections %}
+      {% for col_entry in site.just_the_docs.collections %}
+        {% assign col_key = col_entry[0] %}
+        {% assign col_cfg = col_entry[1] %}
+        {% assign col_docs = site[col_key] | where_exp: "p", "p.title != nil" | where_exp: "p", "p.nav_exclude != true" %}
+        {% if col_docs.size > 0 %}
+          <div class="sidebar-group">{{ col_cfg.name | default: col_key | escape }}</div>
+          {% include nav_items.html pages=col_docs %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {% if site.nav_external_links and site.nav_external_links.size > 0 %}
+      <div class="sidebar-group uvy-docs-ext-group">Links</div>
+      {% for ext in site.nav_external_links %}
+        <a class="uvy-docs-ext-link" href="{{ ext.url | escape }}"{% if ext.opens_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>
+          <span>{{ ext.title | escape }}</span>
+          <svg class="icon icon-small icon-muted" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#tabler-external-link"></use></svg>
+        </a>
+      {% endfor %}
+    {% endif %}
+  </nav>
+</aside>
