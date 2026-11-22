@@ -17,7 +17,7 @@ Live documentation (hosted with this theme): [unitvectory-labs.github.io/uvy-doc
 In your repository's `docs/_config.yml`:
 
 ```yaml
-remote_theme: UnitVectorY-Labs/uvy-docs-theme@v0.1.0
+remote_theme: UnitVectorY-Labs/uvy-docs-theme@v0.2.0
 plugins:
   - jekyll-remote-theme
 ```

@@ -16,7 +16,7 @@ This documentation site is built with the theme itself and serves as the live re
 Switch any existing `just-the-docs` repository in `docs/_config.yml`:
 
 ```yaml
-remote_theme: UnitVectorY-Labs/uvy-docs-theme@v0.1.0
+remote_theme: UnitVectorY-Labs/uvy-docs-theme@v0.2.0
 plugins:
   - jekyll-remote-theme
 ```
@@ -26,7 +26,7 @@ Existing Markdown pages, frontmatter (`title`, `nav_order`, `parent`, `has_child
 ## What the theme provides
 
 - **UnitVectorY-Labs visual language:** Cool light surfaces (`#F5F7FA` / `#FFFFFF`), midnight blue-slate dark mode (`#090D16` / `#111827`), bright signal orange (`#F25C05` / `#FF7A1A`), fixed-width monospace headings and chrome paired with system sans prose, and zero external font dependencies.
-- **Universal header and sticky footer:** `60px` top bar with the theme-adaptive isometric unit cube mark, direct sun/moon `uvy-theme` cookie toggle, and an always-visible compact footer derived automatically from repository metadata.
+- **Universal header and sticky footer:** `60px` top bar with the theme-adaptive isometric unit cube mark, a Tabler GitHub icon beside the direct sun/moon `uvy-theme` cookie toggle, reveal-on-scroll-up behavior, and an always-visible compact footer derived automatically from repository metadata.
 - **Sticky navigation and mobile drawer:** Multi-level sidebar navigation ordered by `nav_order` and `parent`, collection groups, breadcrumbs, and an accessible focus-trapped mobile drawer below `768px`.
 - **Client-side full-text search:** Build-time Liquid JSON index (`assets/js/search-data.json`) with keyboard navigation (`/` to focus, arrow keys, `Enter`, `Escape`) and zero external search libraries.
 - **Documentation ergonomics:** Syntax-highlighted code blocks with copy bars, keyboard-scrollable tables, live-themed Mermaid diagrams, heading anchor links, and semantic callouts.

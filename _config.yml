@@ -42,6 +42,7 @@ gh_edit_branch: "main"
 gh_edit_view_mode: "blob"
 
 exclude:
+  - AGENTS.md
   - Gemfile
   - Gemfile.lock
   - README.md

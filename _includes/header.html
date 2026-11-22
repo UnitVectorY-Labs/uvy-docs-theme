@@ -10,7 +10,32 @@
   {% endif %}
 {% endif %}
 {% if repo_url == nil or repo_url == '' %}
+  {% if site.aux_links %}
+    {% for aux in site.aux_links %}
+      {% assign aux_val = aux[1] %}
+      {% if aux_val.first %}
+        {% assign aux_href = aux_val.first %}
+      {% else %}
+        {% assign aux_href = aux_val %}
+      {% endif %}
+      {% if aux_href contains 'github.com/' %}
+        {% assign repo_url = aux_href %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endif %}
+{% if repo_url == nil or repo_url == '' %}
   {% assign repo_url = site.github.repository_url %}
+{% endif %}
+{% assign repo_name = site.uvy_docs.repository_name %}
+{% if repo_name == nil or repo_name == '' %}
+  {% if repo_url and repo_url != '' %}
+    {% assign repo_parts = repo_url | split: '/' %}
+    {% assign repo_name = repo_parts.last %}
+  {% else %}
+    {% assign repo_name = site.title | default: 'Repository' %}
+  {% endif %}
 {% endif %}
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header{% if site.uvy_docs.wide %} site-header--wide{% endif %}">
@@ -25,30 +50,23 @@
         <span>{{ site.title | default: 'Documentation' | escape }}</span>
       </a>
     </div>
-    <nav aria-label="Main navigation">
-      {% if site.uvy_docs.header_links %}
+    {% if site.uvy_docs.header_links and site.uvy_docs.header_links.size > 0 %}
+      <nav aria-label="Main navigation">
         {% for link in site.uvy_docs.header_links %}
           <a href="{{ link.url | escape }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
         {% endfor %}
-      {% elsif site.aux_links %}
-        {% for aux in site.aux_links %}
-          {% assign aux_title = aux[0] %}
-          {% assign aux_val = aux[1] %}
-          {% if aux_val.first %}
-            {% assign aux_href = aux_val.first %}
-          {% else %}
-            {% assign aux_href = aux_val %}
-          {% endif %}
-          <a href="{{ aux_href | escape }}">{{ aux_title | escape }}</a>
-        {% endfor %}
-      {% elsif repo_url and repo_url != '' %}
-        <a href="{{ '/' | relative_url }}" aria-current="page">Docs</a>
-        <a href="{{ repo_url | escape }}">GitHub</a>
+      </nav>
+    {% endif %}
+    <div class="header-actions">
+      {% if repo_url and repo_url != '' %}
+        <a class="icon-button" href="{{ repo_url | escape }}" aria-label="{{ repo_name | escape }} on GitHub" title="{{ repo_name | escape }} on GitHub">
+          <svg class="icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#tabler-brand-github"></use></svg>
+        </a>
       {% endif %}
-    </nav>
-    <button id="theme" class="icon-button" type="button" aria-label="Switch color theme" hidden>
-      <svg class="icon" aria-hidden="true" data-icon="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#tabler-moon"></use></svg>
-      <svg class="icon" aria-hidden="true" data-icon="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#tabler-sun"></use></svg>
-    </button>
+      <button id="theme" class="icon-button" type="button" aria-label="Switch color theme" hidden>
+        <svg class="icon" aria-hidden="true" data-icon="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#tabler-moon"></use></svg>
+        <svg class="icon" aria-hidden="true" data-icon="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#tabler-sun"></use></svg>
+      </button>
+    </div>
   </div>
 </header>

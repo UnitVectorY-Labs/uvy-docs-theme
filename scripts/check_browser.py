@@ -36,7 +36,12 @@ def check_layout(page, check_footer_height=True):
     assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), f"Overflow: {page.url}"
     assert page.locator("h1").count() == 1, f"Expected 1 h1: {page.url}"
     assert page.locator(".site-header .uvy-mark polygon").count() == 3, page.url
+    assert page.locator(".site-header nav").count() == 0, f"Unexpected top nav tabs: {page.url}"
+    assert page.locator(".site-header .header-actions a.icon-button").count() == 1, page.url
     assert page.locator("#theme svg:visible").count() == 1, page.url
+    if page.viewport_size["width"] >= 768:
+        assert page.locator("#menu").is_hidden(), f"#menu visible on desktop: {page.url}"
+        assert page.locator("#menu-close").is_hidden(), f"#menu-close visible on desktop: {page.url}"
     assert "UVY" not in page.title(), f"Unexpected UVY in title: {page.title()}"
     brand_text = page.locator(".site-header .brand").inner_text()
     assert "UVY" not in brand_text, f"Unexpected UVY in brand: {brand_text}"
@@ -168,6 +173,20 @@ try:
             btn = page.locator(".uvy-code .uvy-copy").first
             btn.click()
             expect(btn).to_have_class(re.compile(r"\bis-copied\b"))
+
+        # Verify reveal-on-scroll-up header behavior on a tall page
+        for u in urls:
+            page.goto(base + u, wait_until="domcontentloaded")
+            doc_h = page.evaluate("document.documentElement.scrollHeight")
+            if doc_h > 1300:
+                page.evaluate("window.scrollTo(0, 500)")
+                page.wait_for_timeout(250)
+                assert "is-hidden" in (page.locator(".site-header").get_attribute("class") or ""), f"Header should hide on scroll down ({u})"
+                page.evaluate("window.scrollTo(0, 320)")
+                page.wait_for_timeout(250)
+                assert "is-hidden" not in (page.locator(".site-header").get_attribute("class") or ""), f"Header should reveal on scroll up ({u})"
+                assert page.locator(".site-header").evaluate("el => el.getBoundingClientRect().top") >= -1
+                break
 
         # 200% zoom
         page.set_viewport_size({"width": 640, "height": 900})

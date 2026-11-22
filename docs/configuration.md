@@ -27,7 +27,7 @@ permalink: /configuration
 | `callouts` | Maps Kramdown class names to semantic colors and optional titles | Built-in `highlight`, `important`, `new`, `note`, `warning` |
 | `mermaid.version` | Enables Mermaid rendering using jsDelivr at the pinned version | *(disabled)* |
 | `nav_external_links` | External links appended under `Links` in the sidebar (`title`, `url`, `opens_in_new_tab`) | *(none)* |
-| `aux_links` | Top-bar navigation links (`"Label": "https://..."` or single-item array) | Derived `Docs` + `GitHub` |
+| `aux_links` | GitHub URL fallback for the header repository icon and footer | Derived from `gh_edit_repository` |
 | `gh_edit_link` | Displays an edit link beneath article content when `true` | `false` |
 | `gh_edit_link_text` | Link text for the bottom edit link | `Edit this page on GitHub.` |
 | `gh_edit_repository` | Repository URL used for edit links, header `GitHub` link, and footer attribution | Derived from `nav_external_links` or GitHub metadata |
@@ -67,7 +67,7 @@ uvy_docs:
 | `uvy_docs.license_url` | Explicit license destination URL | `<repository>/blob/<branch>/LICENSE` |
 | `uvy_docs.search_enabled` | Toggle full-text search | `search_enabled` (`true`) |
 | `uvy_docs.wide` | Opt into fluid `.page--wide` layout | `false` |
-| `uvy_docs.header_links` | Explicit top-bar navigation links | `aux_links`, then `Docs` + `GitHub` |
+| `uvy_docs.header_links` | Optional top-bar navigation links (omitted by default so single-section docs stay free of redundant tabs) | *(none)* |
 
 ## Footer attribution
 
