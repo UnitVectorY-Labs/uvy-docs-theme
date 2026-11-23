@@ -63,7 +63,7 @@ uvy_docs:
 | `uvy_docs.repository` | GitHub repository URL for header and footer | `gh_edit_repository`, then first GitHub `nav_external_links` entry |
 | `uvy_docs.repository_name` | Bold monospace repository slug in the footer | Last path segment of `repository` |
 | `uvy_docs.branch` | Branch for generated `LICENSE` URL | `gh_edit_branch`, then `main` |
-| `uvy_docs.license` | License label shown in the sticky footer | `MIT License` |
+| `uvy_docs.license` | Optional license label shown in the sticky footer | *(unset; omitted)* |
 | `uvy_docs.license_url` | Explicit license destination URL | `<repository>/blob/<branch>/LICENSE` |
 | `uvy_docs.search_enabled` | Toggle full-text search | `search_enabled` (`true`) |
 | `uvy_docs.wide` | Opt into fluid `.page--wide` layout | `false` |
@@ -71,8 +71,20 @@ uvy_docs:
 
 ## Footer attribution
 
-The sticky `.site-footer` always follows the UnitVectorY-Labs compact pattern:
+The sticky `.site-footer` defaults to:
 
-`UnitVectorY-Labs | MIT License | <repository> on GitHub`
+`UnitVectorY-Labs | <repository> on GitHub`
+
+A license appears only when `uvy_docs.license` is explicitly configured. An unset, empty, or `false` value omits both the license link and its separator. Setting only `uvy_docs.license_url` does not enable the license segment. The theme does not infer a site's license from its own MIT license.
+
+For an MIT-licensed project, set both the label and destination:
+
+```yaml
+uvy_docs:
+  license: "MIT License"
+  license_url: "https://github.com/UnitVectorY-Labs/example-repo/blob/main/LICENSE"
+```
+
+This renders `UnitVectorY-Labs | MIT License | <repository> on GitHub`. Projects without a license should omit these settings.
 
 Because documentation sites typically publish from `/docs` rather than the repository root, the license link automatically points to `<repository>/blob/<branch>/LICENSE` unless overridden via `uvy_docs.license_url`.

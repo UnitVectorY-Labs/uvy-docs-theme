@@ -10,7 +10,7 @@
   - Keep `.site-header` at `60px` desktop with the inline theme-adaptive isometric unit cube (`.uvy-mark`, static on hover) + monospace site title on the left, and `.header-actions` on the right holding the Tabler outline `brand-github` icon link (`a.icon-button`) immediately to the left of the `#theme` sun/moon cookie toggle.
   - Omit top-bar `<nav>` tabs by default on single-section documentation sites; only render `<nav>` when `uvy_docs.header_links` is explicitly configured.
   - Preserve reveal-on-scroll-up `.site-header` behavior (`.is-hidden` on downward scroll past the header, returning immediately on upward scroll, top of page, drawer open, or `:focus-within`), coordinated with desktop `.sidebar` sticky `top` offset so sidebar tools and search are never obscured.
-  - Keep the compact always-visible sticky `.site-footer` (`UnitVectorY-Labs | <license> | <repo> on GitHub`, linking `LICENSE` to `<repo>/blob/<branch>/LICENSE` for `/docs` deployments).
+  - Keep the compact always-visible sticky `.site-footer` (`UnitVectorY-Labs | <repo> on GitHub` by default; include the license segment only when explicitly configured, linking `LICENSE` to `<repo>/blob/<branch>/LICENSE` for `/docs` deployments).
 - **Typography and content geometry:** Keep Markdown prose (`p`, `li`, `blockquote`, callouts) capped at `70ch` in `--uvy-font-sans`, with headings, navigation, controls, table headers, and code in `--uvy-font-mono`, while allowing `.table-wrap` tables, `.uvy-code` blocks, and `.uvy-mermaid` diagrams to use the full `.workspace` width.
 
 ## Jekyll and GitHub Pages constraints

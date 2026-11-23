@@ -51,3 +51,8 @@ exclude:
   - vendor/
   - .venv/
   - requirements*.txt
+
+# This site is MIT licensed; consuming sites choose their own footer license.
+uvy_docs:
+  license: "MIT License"
+  license_url: "https://github.com/UnitVectorY-Labs/uvy-docs-theme/blob/main/LICENSE"

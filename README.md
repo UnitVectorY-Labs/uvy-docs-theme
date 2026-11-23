@@ -17,17 +17,20 @@ Live documentation (hosted with this theme): [unitvectory-labs.github.io/uvy-doc
 In your repository's `docs/_config.yml`:
 
 ```yaml
-remote_theme: UnitVectorY-Labs/uvy-docs-theme@v0.3.0
+remote_theme: UnitVectorY-Labs/uvy-docs-theme@v0.4.0
 plugins:
   - jekyll-remote-theme
 ```
 
 `uvy-docs-theme` is drop-in compatible with existing `just-the-docs` frontmatter (`title`, `nav_order`, `parent`, `has_children`, `has_toc`, `permalink`), `{:toc}`, callouts, Mermaid blocks, `nav_external_links`, `aux_links`, `just_the_docs.collections`, and `gh_edit_*` settings.
 
+The footer has no license label by default. Set `uvy_docs.license` and `uvy_docs.license_url` only when the site should display a project license; see [configuration](docs/configuration.md#footer-attribution).
+
 ## Local preview and checks
 
 ```sh
 bundle install
+bundle exec ruby scripts/check_footer.rb
 bundle exec jekyll build
 python3 scripts/check_site.py
 ```

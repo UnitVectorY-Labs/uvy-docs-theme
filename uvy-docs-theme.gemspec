@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = "uvy-docs-theme"
-  spec.version       = "0.3.0"
+  spec.version       = "0.4.0"
   spec.authors       = ["UnitVectorY-Labs"]
   spec.summary       = "UnitVectorY-Labs documentation theme for Jekyll and GitHub Pages."
   spec.homepage      = "https://github.com/UnitVectorY-Labs/uvy-docs-theme"

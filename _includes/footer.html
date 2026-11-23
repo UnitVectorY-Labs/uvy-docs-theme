@@ -22,7 +22,7 @@
   {% endif %}
 {% endif %}
 {% assign repo_branch = site.uvy_docs.branch | default: site.gh_edit_branch | default: 'main' %}
-{% assign license_name = site.uvy_docs.license | default: 'MIT License' %}
+{% assign license_name = site.uvy_docs.license %}
 {% assign license_url = site.uvy_docs.license_url %}
 {% if license_url == nil or license_url == '' %}
   {% if repo_url and repo_url != '' %}
@@ -35,8 +35,10 @@
   <div class="footer-inner">
     <p>
       <a href="https://github.com/UnitVectorY-Labs">UnitVectorY-Labs</a>
-      <span class="footer-sep" aria-hidden="true">|</span>
-      <a href="{{ license_url | escape }}">{{ license_name | escape }}</a>
+      {% if license_name and license_name != empty %}
+        <span class="footer-sep" aria-hidden="true">|</span>
+        <a href="{{ license_url | escape }}">{{ license_name | escape }}</a>
+      {% endif %}
       {% if repo_url and repo_url != '' %}
         <span class="footer-sep" aria-hidden="true">|</span>
         <a href="{{ repo_url | escape }}"><strong>{{ repo_name | escape }}</strong></a> on GitHub
