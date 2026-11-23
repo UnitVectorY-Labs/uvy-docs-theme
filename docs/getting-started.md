@@ -18,7 +18,7 @@ permalink: /getting-started
 title: ghorgsync
 description: "Clone and update all organization repositories in one folder."
 
-remote_theme: UnitVectorY-Labs/uvy-docs-theme@v0.3.0
+remote_theme: UnitVectorY-Labs/uvy-docs-theme@v0.4.0
 plugins:
   - jekyll-remote-theme
 ```
@@ -36,7 +36,7 @@ A complete `docs/_config.yml` for a UnitVectorY-Labs repository looks like this:
 title: my-tool
 description: "Concise one-sentence summary of the repository."
 
-remote_theme: UnitVectorY-Labs/uvy-docs-theme@v0.3.0
+remote_theme: UnitVectorY-Labs/uvy-docs-theme@v0.4.0
 plugins:
   - jekyll-remote-theme
 
